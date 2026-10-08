@@ -1,0 +1,64 @@
+import sympy
+from sympy import symbols, diff, solve, Matrix, hessian
+
+x, y = symbols('x y')
+
+f_xy = x**3 + y**3 - 3*x*y
+
+print(f"Original function : f(x,y) = {f_xy}")
+
+f_x = diff(f_xy, x)
+f_y = diff(f_xy, y)
+
+print(f"\nPartial derivative with respect to x f'(x) = {f_x}")
+print(f"Partial derivative with respect to y f'(y) = {f_y}")
+
+critical_points = solve([f_x, f_y], (x, y))
+
+real_critical_points = []
+for point in critical_points:
+    if point[0].is_real and point[1].is_real:
+        real_critical_points.append(point)
+
+print(f"\nReal Critical points: {real_critical_points}")
+
+f_xx = diff(f_x, x)
+f_yy = diff(f_y, y)
+f_xy_mixed = diff(f_x, y)
+H = Matrix([[f_xx, f_xy_mixed], [f_xy_mixed, f_yy]])
+
+print(f"\nf''(x) = {f_xx}")
+print(f"f''(y) = {f_yy}")
+print(f"f''(x,y) = {f_xy_mixed}")
+print("\nHessian Matrix:")
+display(H)
+
+print("\n--- Classification of Stationary Points ---")
+for point in real_critical_points:
+    x_val, y_val = point
+
+    subs_dict = {x: x_val, y: y_val}
+
+    H_at_point = H.subs(subs_dict)
+    D = H_at_point.det()
+
+    f_xx_at_point = f_xx.subs(subs_dict)
+
+    print(f"\nCritical Point: ({x_val}, {y_val})")
+    print(f"Hessian at point:")
+    display(H_at_point)
+    print(f"Determinant (D): {D}")
+    print(f"f''(x) at point: {f_xx_at_point}")
+
+    D_float = float(D)
+    f_xx_float = float(f_xx_at_point)
+
+    if D_float > 0:
+        if f_xx_float > 0:
+            print("Classification: Local Minimum")
+        else:
+            print("Classification: Local Maximum")
+    elif D_float < 0:
+        print("Classification: Saddle Point")
+    else:
+        print("Classification: Inconclusive (D = 0)")
