@@ -1,0 +1,31 @@
+import sympy
+
+x = sympy.Symbol('x')
+
+f_x = x**3-6*x**2+9*x+1
+print(f"Original function: f(x) = {f_x}")
+
+f_prime_x = sympy.diff(f_x, x)
+print(f"First derivative: f'(x) = {f_prime_x}")
+
+f_double_prime_x = sympy.diff(f_prime_x, x)
+print(f"Second derivative: f''(x) = {f_double_prime_x}")
+
+critical_points = sympy.solve(f_prime_x, x)
+print(f"\nCritical points (where f'(x) = 0): {critical_points}")
+
+print("\n--- Second Derivative Test ---")
+for point in critical_points:
+    second_derivative_value = f_double_prime_x.subs(x, point)
+    function_value = f_x.subs(x, point)
+
+    print(f"\nAt x = {point}:")
+    print(f"  f''(x) evaluated at x={point}: {second_derivative_value}")
+    print(f"  f(x) evaluated at x={point}: {function_value}")
+
+    if second_derivative_value > 0:
+        print(f"  Since f''({point}) > 0, there is a local minimum at ({point},{function_value})")
+    elif second_derivative_value < 0:
+        print(f"  Since f''({point}) < 0, there is a local maximum at ({point},{function_value})")
+    else:
+        print(f"  Since f''({point}) = 0, the second derivative test is inconclusive. Further analysis (e.g., first derivative test around the point) is needed.")
