@@ -1,0 +1,36 @@
+import numpy as np
+
+# Function
+def f(x):
+  return x**2 - 4*x + 4
+
+# First derivative
+def df(x):
+  return 2*x - 4
+
+# Second derivative
+
+def d2f(x):
+  return 2
+
+# Initial guess
+x = 0
+
+# Tolerance
+tol = 1e-6
+
+# Maximum iterations
+max_iter = 20
+
+print("Iteration\t x")
+
+for i in range(max_iter):
+  x_new = x - df(x)/d2f(x)
+
+  print(i+1, "\t\t", round(x_new,6))
+
+  if abs(x_new - x) < tol:
+    break
+  x = x_new
+print("\nOptimal Point = ", x_new)
+print("Minimum Function Value = ", f(x_new))
